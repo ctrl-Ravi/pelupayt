@@ -60,5 +60,3 @@ Analyze YouTube playlists and videos with ease! Get detailed information about v
 - [FastAPI](https://fastapi.tiangolo.com/)
 - [Jinja2](https://jinja.palletsprojects.com/)
 - [Halfmoon](https://www.gethalfmoon.com/)
-
-Made with ❤️ by [Sharat Sachin](https://github.com/sharatsachin)
