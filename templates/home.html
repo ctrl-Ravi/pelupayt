@@ -13,7 +13,7 @@
 
     <!-- Favicon and title -->
     <link rel="icon" href="{{url_for('static', path='/favicon.png')}}" />
-    <title>YouTube Playlist Length</title>
+    <title>Playlist Length Analyzer</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6W24HY1SKP"></script>
@@ -44,11 +44,11 @@
         <!-- Navbar start -->
         <nav class="navbar h-100 bg-light-lm">
             <div class="container-lg">
-                <a href="https://ytplaylist-len.sharats.dev/">
+                <a href="https://pelupa.in/">
                     <img src="{{url_for('static', path='/logo.png')}}" height="60" alt="YouTube Playlist Length" />
                 </a>
                 <span class="navbar-text text-monospace">
-                    <span class="badge badge-danger text-dark-dm text-white-lm"> v3.0</span>
+                    <span class="badge badge-danger text-dark-dm text-white-lm"> Ravi</span>
                 </span>
                 <button class="btn btn-lg btn-square ml-auto text-danger" type="button"
                     onclick="halfmoon.toggleDarkMode()">
@@ -56,7 +56,7 @@
                     <span class="sr-only">Toggle dark mode</span>
                 </button>
 
-                <a href="https://github.com/sharatsachin/ytplaylist-len">
+                <a href="https://github.com/ctrl-ravi">
                     <button class="btn btn-lg btn-square ml-5 text-danger">
                         <i class="fab fa-github" aria-hidden="true"></i>
                         <span class="sr-only">Toggle dark mode</span>
@@ -81,7 +81,7 @@
                         <div class="input-group">
                             <textarea autofocus="autofocus" class="form-control"
                                 placeholder="youtube.com/playlist?list=ID1&#10;youtube.com/playlist?list=ID2"
-                                name="search_string" rows="10" required></textarea>
+                                name="search_string" rows="10" required>{{ request.query_params.get('search_string') or '' }}</textarea>
                         </div>
                         <div class="form-text content mx-0 my-5">
                             Optionally, enter a range of videos to analyze in the first link. Leave blank to analyze the
@@ -149,8 +149,7 @@
         <!-- Navbar fixed bottom start -->
         <nav class="navbar navbar-fixed-bottom bg-light-lm">
             <div class="footer-content mx-auto">
-                Made with ❤ by <a href="https://www.sharats.dev"> Sharat Sachin</a>.
-                Buy me a <a href="https://ko-fi.com/sharat">coffee.</a>
+                Made with ❤ by <a href="https://www.pelupa.in">Ravi Prakash</a>.
             </div>
         </nav>
         <!-- Navbar fixed bottom end -->
@@ -164,6 +163,18 @@
             halfmoon.toggleDarkMode();
         }
     </script>
+    
+    <script>
+        window.onload = function () {
+          const params = new URLSearchParams(window.location.search);
+          if (params.get("search_string")) {
+            document.querySelector("form").submit();
+          }
+        };
+      </script>
+      
+
+      
 </body>
 
 </html>

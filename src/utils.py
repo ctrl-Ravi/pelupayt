@@ -11,6 +11,12 @@ def find_time_slice():
     time_slice = datetime.datetime.now().time().hour // 4
     return time_slice
 
+# def find_time_slice():
+#     apis_count = len(os.environ["APIS"].split(";"))
+#     time_slice = datetime.datetime.now().time().hour // 4
+#     return time_slice % apis_count  # safe mod
+
+
 
 async def call_youtube_api(url_type, api, **kwargs):
 

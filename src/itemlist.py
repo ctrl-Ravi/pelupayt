@@ -112,7 +112,6 @@ class ItemList:
 
     def get_output_string(self):
         output_string = []
-
         if not self.playlist_ids and not self.video_ids:
             return [["No valid playlist or video IDs found in input."]]
 
