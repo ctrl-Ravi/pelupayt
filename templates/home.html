@@ -8,170 +8,391 @@
     <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description"
-        content="Get the total length/duration of a YouTube playlist by passing its link as input. You get the time required to watch that playlist at different speeds.">
+        content="Find the total length/duration of any YouTube playlist. Calculate the watch time at different speeds (1.25x, 1.5x, 1.75x, 2x). Free online YouTube playlist duration calculator." />
+    <meta name="keywords" content="YouTube playlist length, playlist duration calculator, YouTube watch time, YouTube video speed calculator, YouTube playlist analyzer" />
+    <meta name="author" content="Ravi Prakash" />
+    <meta name="robots" content="index, follow" />
 
+    <!-- Open Graph tags -->
+    <meta property="og:title" content="YouTube Playlist Length Calculator" />
+    <meta property="og:description" content="Find the total duration of any YouTube playlist. Calculate watch time at different speeds." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://playlistduration.pelupa.in/" />
+    <meta property="og:image" content="https://playlistduration.pelupa.in/logo.png" />
+
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="YouTube Playlist Length Calculator" />
+    <meta name="twitter:description" content="Find how long it takes to watch any YouTube playlist at different speeds." />
+    <meta name="twitter:image" content="https://playlistduration.pelupa.in/logo.png" />
 
     <!-- Favicon and title -->
-    <link rel="icon" href="{{url_for('static', path='/favicon.png')}}" />
-    <title>Playlist Length Analyzer</title>
+    <link rel="icon" href="{{url_for('static', path='favicon.png')}}" />
+    <title>YouTube Playlist Length Calculator - Find Total Duration of Any Playlist</title>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6W24HY1SKP"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-L7C0W255N3"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-
-        gtag('config', 'G-6W24HY1SKP');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-L7C0W255N3');
     </script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8874895270666721"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/js/all.min.js"
-        crossorigin="anonymous"></script>
-    <!-- Halfmoon CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" crossorigin="anonymous" />
 
-    <script src="{{url_for('static', path='/form_validation.js')}}"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Form validation -->
+    <script src="{{url_for('static', path='form_validation.js')}}"></script>
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://playlistduration.pelupa.in/" />
+
+    <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="with-custom-webkit-scrollbars with-custom-css-scrollbars" data-dm-shortcut-enabled="true"
-    data-set-preferred-mode-onload="true">
+<body>
+    <!-- Subtle Background Pattern -->
+    <div class="bg-pattern"></div>
 
-    <div class="page-wrapper with-navbar with-navbar-fixed-bottom">
-        <div class="sticky-alerts"></div>
+    <!-- Navbar -->
+    <nav class="navbar animate-fade-up">
+        <a href="/" class="navbar-brand" aria-label="YouTube Playlist Length Calculator Homepage">
+            <img src="{{url_for('static', path='logo.png')}}" alt="Logo" />
+            <span class="navbar-logo-text">Playlist <span>Duration</span></span>
+        </a>
+        <div class="navbar-actions">
+            <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fa fa-moon" id="themeIcon"></i>
+            </button>
+            <a href="https://github.com/ctrl-ravi" class="icon-btn" aria-label="GitHub profile" target="_blank" rel="noopener">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </nav>
 
-        <!-- Navbar start -->
-        <nav class="navbar h-100 bg-light-lm"style="background-color: #0f5454;"data-dm-bg-color="#0f5454">
-            <div class="container-lg">
-                <a href="https://playlistduration.pelupa.in	">
-                    <img src="{{url_for('static', path='/logo.png')}}" height="111" alt="YouTube Playlist Length" />
-                </a>
-                <button class="btn btn-lg btn-square ml-auto text-white-dm text-black-lm" type="button"
-                    onclick="halfmoon.toggleDarkMode()">
-                    <i class="fa fa-moon" aria-hidden="true"></i>
-                    <span class="sr-only">Toggle dark mode</span>
-                </button>
+    <!-- Main -->
+    <main class="main">
 
-                <a href="https://github.com/ctrl-ravi">
-                    <button class="btn btn-lg btn-square ml-5 text-white-dm text-black-lm">
-                        <i class="fab fa-github" aria-hidden="true"></i>
-                        <span class="sr-only">Toggle dark mode</span>
-                    </button>
-                </a>
+        <!-- Hero -->
+        <div class="hero animate-fade-up delay-100">
+            <div class="hero-tag">
+                <i class="fab fa-youtube text-danger"></i> YouTube tool
             </div>
-        </nav>
-        <!-- Navbar end -->
+            <h1>Find the true length of any <span>YouTube</span> playlist.</h1>
+            <p>Paste a playlist URL, playlist ID, or single video link. Automatically calculate watch times adjusted perfectly to your custom playback speeds.</p>
+        </div>
 
-        <!-- Content wrapper start -->
-        <div class="content-wrapper mt-20">
-            <div class="container px-20 h-50"></div>
-            <div class="container">
-                <div class="content">
-                    <h2 class="content-title">Find the length of any YouTube playlist:</h2>
-                    <form method="POST" onsubmit="return validateForm()">
-                        <div class="form-text content mx-0 my-5">
-                            You can enter a playlist link, playlist ID or even a video link from the playlist!
-                            <br />
-                            You can also enter a single video link or list of playlist links.
+        <!-- Form -->
+        <div class="form-card animate-fade-up delay-200">
+            <form method="POST" onsubmit="return validateForm()">
+                <label class="form-label" for="playlistInput">
+                    <i class="fas fa-link"></i> URL Input
+                </label>
+                <textarea
+                    id="playlistInput"
+                    class="form-textarea"
+                    name="search_string"
+                    autofocus
+                    required
+                    placeholder="https://youtube.com/playlist?list=PLxxxx&#10;https://youtube.com/playlist?list=PLyyyy"
+                    aria-label="Enter YouTube playlist or video URLs"
+                >{{ request.query_params.get('search_string') or '' }}</textarea>
+
+                <!-- Advanced settings -->
+                <div class="advanced-grid" id="advancedGrid">
+                    <div class="advanced-grid-inner">
+                        <div>
+                            <label class="form-label" for="rangeStart"><i class="fas fa-play"></i> Start Point</label>
+                            <input type="number" name="range_start" class="input-field" placeholder="1" id="rangeStart" min="1" max="500" aria-label="Range start">
                         </div>
-                        <div class="input-group">
-                            <textarea autofocus="autofocus" class="form-control"
-                                placeholder="youtube.com/playlist?list=ID1&#10;youtube.com/playlist?list=ID2"
-                                name="search_string" rows="10" required>{{ request.query_params.get('search_string') or '' }}</textarea>
+                        <div>
+                            <label class="form-label" for="rangeEnd"><i class="fas fa-stop"></i> End Point</label>
+                            <input type="number" name="range_end" class="input-field" placeholder="Max" id="rangeEnd" min="1" max="500" aria-label="Range end">
                         </div>
-                        <div class="form-text content mx-0 my-5">
-                            Optionally, enter a range of videos to analyze in the first link. Leave blank to analyze the
-                            entire playlist.
-                            <br />
-                            You can also enter a custom speed (like 2.25), and a YouTube API key to use your own.
+                        <div>
+                            <label class="form-label" for="customSpeed"><i class="fas fa-bolt"></i> Speed</label>
+                            <input type="number" name="custom_speed" class="input-field" placeholder="e.g 1.25" id="customSpeed" min="0.1" max="10" step="0.01" aria-label="Custom playback speed">
                         </div>
-                        <div class="input-group">
-                            <input type="number" class="form-control" placeholder="Range start (1)" name="range_start"
-                                min="1" max="500">
-                            <input type="number" class="form-control" placeholder="Range end (500)" name="range_end"
-                                min="1" max="500">
-                            <input type="number" class="form-control" placeholder="Custom speed (like 2.25)"
-                                name="custom_speed" min="0.1" max="10" step="0.01">
-                            <input type="text" class="form-control" placeholder="YouTube API key" name="youtube_api">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary ml-5 text-dark-dm shadow-none"
-                                    type="submit">Analyze</button>
-                            </div>
+                        <div>
+                            <label class="form-label" for="youtubeApi"><i class="fas fa-key"></i> Passkey</label>
+                            <input type="text" name="youtube_api" class="input-field" placeholder="Custom API" id="youtubeApi" aria-label="YouTube API Key">
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
 
-            <div class="container">
-                {% for block in playlist_detail %}
-                <div class="card">
-                    <div class="card-body">
-                        {% for x in block %}
-                        {% if loop.first %}
-                        <p class="first-line" style="font-weight: bold;">{{ x |
-                            safe
-                            }}</p>
+                <div class="form-actions">
+                    <button type="button" class="advanced-toggle" id="advancedToggle">
+                        <span class="icon-wrap"><i class="fas fa-sliders-h"></i></span> Options <i class="fas fa-chevron-down chevron"></i>
+                    </button>
+                    <button type="submit" class="btn-primary">
+                        Calculate Duration <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Results -->
+        <div id="results">
+            {% for block in playlist_detail %}
+            {% set delay = loop.index0 * 100 + 300 %}
+            {% set dynamic_attr = 'style="animation-delay: ' ~ delay ~ 'ms;"' %}
+            <div class="result-card" {{ dynamic_attr | safe }}>
+
+                {# ── Parse all items into categories ── #}
+                {% set ns = namespace(title='', meta=[], stats=[], speeds=[], notices=[]) %}
+                {% for x in block %}
+                    {% set parts = x.split(' : ', 1) %}
+                    {% if loop.first %}
+                        {# First item is always the title (e.g. "Playlist : Name" or "Video : Name") #}
+                        {% if parts | length == 2 %}
+                            {% set ns.title = parts[1] %}
                         {% else %}
-                        <p class="description">{{ x | safe }}</p>
+                            {% set ns.title = x %}
                         {% endif %}
+                    {% elif parts | length == 2 %}
+                        {% set label = parts[0] | trim %}
+                        {% set value = parts[1] | trim %}
+                        {% if label in ['ID', 'Creator'] %}
+                            {% set ns.meta = ns.meta + [{'label': label, 'value': value}] %}
+                        {% elif label.startswith('At ') %}
+                            {% set ns.speeds = ns.speeds + [{'label': label, 'value': value}] %}
+                        {% else %}
+                            {% set ns.stats = ns.stats + [{'label': label, 'value': value}] %}
+                        {% endif %}
+                    {% else %}
+                        {% set ns.notices = ns.notices + [x] %}
+                    {% endif %}
+                {% endfor %}
+
+                {# ── Header Zone ── #}
+                <div class="result-header">
+                    <div class="result-header-icon">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="result-header-info">
+                        <div class="result-header-title">{{ ns.title | safe }}</div>
+                        {% if ns.meta %}
+                        <div class="result-meta">
+                            {% for m in ns.meta %}
+                            <span class="result-meta-tag">
+                                {% if m.label == 'ID' %}<i class="fas fa-hashtag"></i>
+                                {% elif m.label == 'Creator' %}<i class="fas fa-user"></i>
+                                {% endif %}
+                                {{ m.value }}
+                            </span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# ── Notices ── #}
+                {% for notice in ns.notices %}
+                <div class="result-notice">
+                    <i class="fas fa-triangle-exclamation"></i> {{ notice | safe }}
+                </div>
+                {% endfor %}
+
+                {# ── Stat Grid Zone ── #}
+                {% if ns.stats %}
+                <div class="stat-grid">
+                    {% for s in ns.stats %}
+                    <div class="stat-card">
+                        <div class="stat-label">{{ s.label }}</div>
+                        <div class="stat-value{% if s.label == 'Total length' or s.label == 'Duration' %} highlight{% endif %}">{{ s.value | safe }}</div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {# ── Speed Zone ── #}
+                {% if ns.speeds %}
+                <div class="speed-section">
+                    <div class="speed-section-title">
+                        <i class="fas fa-gauge-high"></i> Playback Speeds
+                    </div>
+                    <div class="speed-grid">
+                        {% for sp in ns.speeds %}
+                        <div class="speed-chip">
+                            <span class="speed-chip-label">{{ sp.label }}</span>
+                            <span class="speed-chip-value">{{ sp.value | safe }}</span>
+                        </div>
                         {% endfor %}
                     </div>
                 </div>
-                {% endfor %}
+                {% endif %}
+
             </div>
-
-<!--             <div class="container">
-                <div class="content">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-"
-                         crossorigin="anonymous"></script>
-                    <!-- Below form -->
-<!--                     <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-8874"
-                         data-ad-slot="4571294072"
-                         data-ad-format="auto"></ins>
-                    <script>
-                         (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                    
-                </div>
-            </div> -->
-
-
+            {% endfor %}
         </div>
-        <!-- Content wrapper end -->
 
+        {% if not playlist_detail %}
+        <hr class="section-divider animate-fade-up delay-300">
 
-        <!-- Navbar fixed bottom start -->
-        <nav class="navbar navbar-fixed-bottom bg-light-lm"style="background-color: #0f5454;"data-dm-bg-color="#0f5454">
-            <div class="footer-content mx-auto">
-                Made with ❤ by <a href="https://pelupa.in">Ravi Prakash</a>.
+        <!-- About -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Overview</span>
+            <h2 class="section-title">Analyze efficiently.</h2>
+            <p class="section-text">This free tool instantly aggregates the runtime of massive YouTube playlists, automatically discounting unavailable or private videos, and generates reliable playback duration forecasts.</p>
+        </div>
+
+        <!-- Extension -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Browser Tools</span>
+            <div class="ext-card">
+                <div class="ext-icon">
+                    <i class="fab fa-chrome"></i>
+                </div>
+                <div class="ext-content">
+                    <h3>Chrome Extension Direct Analysis</h3>
+                    <p>Integrate duration calculations natively while browsing YouTube — zero copy-pasting required.</p>
+                    <div class="ext-badges">
+                        <span class="badge"><i class="fas fa-bolt text-warning"></i> One-click execution</span>
+                        <span class="badge"><i class="fas fa-shield-alt text-success"></i> Secure & private</span>
+                        <span class="badge"><i class="fas fa-laptop-code text-info"></i> Course tracking</span>
+                    </div>
+                    <a href="https://pelupa.in/how-to-download-and-use-the-playlist-duration-analyzer-chrome-extension/" class="btn-outline" target="_blank" rel="noopener">
+                        Get Extension <i class="fas fa-arrow-up-right-from-square"></i>
+                    </a>
+                </div>
             </div>
-        </nav>
-        <!-- Navbar fixed bottom end -->
-    </div>
-    <!-- Page wrapper end -->
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
+        <!-- Features -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Capabilities</span>
+            <h2 class="section-title">Everything you need.</h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <i class="fas fa-stopwatch"></i>
+                    <h4>Total Duration</h4>
+                    <p>Precise extraction of total running length.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-gauge-high"></i>
+                    <h4>Speed Benchmarks</h4>
+                    <p>Pre-calculated at 1.25×, 1.5×, 1.75×, and 2× defaults.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-sliders"></i>
+                    <h4>Custom Modifiers</h4>
+                    <p>Input unique playback ratios down to the decimal.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-list-ol"></i>
+                    <h4>Range Indexing</h4>
+                    <p>Isolate segments of a playlist using standard index constraints.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-layer-group"></i>
+                    <h4>Batch Executable</h4>
+                    <p>Process distinct playlists sequentially in a single pass.</p>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-film"></i>
+                    <h4>Singleton Support</h4>
+                    <p>Accepts individual video IDs securely.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How to use -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Methodology</span>
+            <h2 class="section-title">Four step pipeline.</h2>
+            <div class="steps-wrapper">
+                <div class="steps-grid">
+                    <div class="step-item">
+                        <div class="step-number">1</div>
+                        <h4>Extract</h4>
+                        <p>Locate the playlist URL</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">2</div>
+                        <h4>Inject</h4>
+                        <p>Paste to the input node</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">3</div>
+                        <h4>Configure</h4>
+                        <p>Assign boundaries</p>
+                    </div>
+                    <div class="step-item">
+                        <div class="step-number">4</div>
+                        <h4>Execute</h4>
+                        <p>Trigger analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Engineered with <i class="fas fa-heart" style="color: var(--brand-tertiary);"></i> by <a href="https://pelupa.in" target="_blank" rel="noopener">Ravi Prakash</a>
+    </footer>
+
     <script>
-        // dark mode toggler
-        function toggleDemo() {
-            halfmoon.toggleDarkMode();
+        // ── Theme toggle ──
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const root = document.documentElement;
+
+        function applyTheme(dark) {
+            if (dark) {
+                root.setAttribute('data-theme', 'dark');
+                themeIcon.className = 'fa fa-sun';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                root.removeAttribute('data-theme');
+                themeIcon.className = 'fa fa-moon';
+                localStorage.setItem('theme', 'light');
+            }
         }
-    </script>
-    
-    <script>
-        window.onload = function () {
-          const params = new URLSearchParams(window.location.search);
-          if (params.get("search_string")) {
-            document.querySelector("form").submit();
-          }
-        };
-      </script>
-      
 
-      
+        // Load saved preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') applyTheme(true);
+
+        themeToggle.addEventListener('click', () => {
+            applyTheme(root.getAttribute('data-theme') !== 'dark');
+        });
+
+        // ── Advanced settings toggle ──
+        const advancedToggle = document.getElementById('advancedToggle');
+        const advancedGrid = document.getElementById('advancedGrid');
+
+        advancedToggle.addEventListener('click', () => {
+            const isOpen = advancedGrid.classList.toggle('visible');
+            advancedToggle.classList.toggle('open', isOpen);
+            
+            // Adjust max-height for smooth transition
+            if (isOpen) {
+                // Trigger reflow
+                advancedGrid.style.gridTemplateRows = "1fr";
+            } else {
+                advancedGrid.style.gridTemplateRows = "0fr";
+            }
+        });
+
+        // ── Auto-submit if URL has search_string param (Chrome Extension) ──
+        window.addEventListener('load', function () {
+            const params = new URLSearchParams(window.location.search);
+            // Only auto-submit if search_string is present AND no results are displayed yet
+            if (params.get('search_string') && !document.querySelector('.result-card')) {
+                document.querySelector('form').submit();
+            }
+        });
+    </script>
+
 </body>
 
 </html>

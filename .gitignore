@@ -1,5 +1,9 @@
 venv/
+.venv/
 .vscode/
 .env
 *.pyc
+__pycache__/
 *.code-workspace
+desktop.ini
+.gemini/

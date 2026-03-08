@@ -10,14 +10,27 @@ from pymongo import MongoClient
 from src.utils import call_youtube_api, parse
 from src.video import Video
 
-REDIS_URL = os.environ["REDIS_URL"]
-MONGO_URL = os.environ["MONGO_URL"]
+REDIS_URL = os.environ.get("REDIS_URL")
+MONGO_URL = os.environ.get("MONGO_URL")
 CACHE_TTL = 60 * 60 * 24  # 24 hours
 
-redis_client = redis.from_url(REDIS_URL)
-mongo_collection = MongoClient(os.environ["MONGO_URL"])["ytplaylistdb"][
-    "ytplaylistcounts"
-]
+class DummyRedis:
+    def __init__(self):
+        self.cache = {}
+    def get(self, key):
+        return self.cache.get(key)
+    def setex(self, key, time, value):
+        self.cache[key] = value
+
+class DummyMongo:
+    def update_one(self, *args, **kwargs):
+        pass
+
+redis_client = redis.from_url(REDIS_URL) if REDIS_URL else DummyRedis()
+if MONGO_URL:
+    mongo_collection = MongoClient(MONGO_URL)["ytplaylistdb"]["ytplaylistcounts"]
+else:
+    mongo_collection = DummyMongo()
 
 
 class Playlist:
@@ -120,18 +133,6 @@ class Playlist:
             else:
                 break
 
-    async def get_videos_details(self):
-
-        self.videos = []
-        for i in range(0, len(self.video_ids), 50):
-            video_ids = self.video_ids[i : i + 50]
-            video_data = await call_youtube_api(
-                "videos", api=self.youtube_api, video_ids=video_ids
-            )
-
-            for id, data in zip(video_ids, video_data["items"]):
-                video = Video(id, data, self.custom_speed)
-                self.videos.append(video)
 
     async def get_videos_details(self):
 

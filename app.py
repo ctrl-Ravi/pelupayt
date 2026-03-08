@@ -8,12 +8,11 @@ from typing import Annotated, Optional
 from urllib.parse import urlencode
 
 from fastapi import FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from src.itemlist import ItemList
-from src.utils import find_time_slice
 
 YOUTUBE_APIS = os.environ["APIS"].split(";")
 
@@ -50,8 +49,8 @@ async def home(
         range_start, range_end = range_end, range_start
 
     try:
-        logger.info(f"Input TS({find_time_slice()}): {search_string}")
-        youtube_api = youtube_api if youtube_api else YOUTUBE_APIS[find_time_slice()]
+        logger.info(f"Input request: {search_string}")
+        youtube_api = youtube_api if youtube_api else YOUTUBE_APIS[0]
         items = ItemList(
             search_string, range_start, range_end, custom_speed, youtube_api
         )
@@ -77,7 +76,11 @@ def static_from_root_google():
     return "google.com, pub-8874895270666721, DIRECT, f08c47fec0942fa0"
 
 
+@fapp.get("/style.css", response_class=FileResponse)
+def get_style():
+    return FileResponse("templates/style.css", media_type="text/css")
+
+
 if __name__ == "__main__":
-    fapp.run(
-        use_reloader=True, debug=False, host="0.0.0.0", port=10000, access_log=False
-    )
+    import uvicorn
+    uvicorn.run("app:fapp", host="0.0.0.0", port=10000, reload=True, access_log=False)

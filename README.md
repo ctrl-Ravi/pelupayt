@@ -1,62 +1,107 @@
-# 🎥 Playlist Length Analyzer :💓
+# 🎬 YouTube Playlist Duration Calculator
 
-Analyze YouTube playlists and videos with ease! Get detailed information about video durations and playlist lengths.
+A fast, minimal web app to calculate the total duration of any YouTube playlist — with playback speed breakdowns.
 
-## 🌟 Features
+**Live:** [playlistduration.pelupa.in](https://playlistaws.pelupa.in)
 
-- 📋 Analyze multiple playlists and individual videos
-- ⏱️ Calculate total duration of playlists
-- 🚀 Estimate playback times at different speeds (1.25x, 1.50x, 1.75x, 2.00x)
-- 🔢 Support for custom playback speeds
-- 📅 View average video length in playlists
-- 🔍 Analyze specific video ranges within playlists
-- 📈 Asynchronous requests and caching layer to speed up processing
+---
 
-## 🚧 Future additions (if I ever get around to it)
-- [ ] Add more analytics related to the videos (like average views, likes, etc.)
+## Features
 
-## 🚀 Getting Started
+- **Instant Duration** — Paste a playlist URL and get the total watch time
+- **Speed Benchmarks** — See durations at 1.25×, 1.5×, 1.75×, 2× speeds
+- **Custom Speed** — Enter any playback multiplier
+- **Range Selection** — Calculate duration for a specific range of videos
+- **Batch Input** — Analyze multiple playlists in one go
+- **Single Videos** — Also supports individual video links
+- **Chrome Extension** — One-click analysis directly from YouTube
+- **Dark Mode** — Full dark/light theme support
 
-1. Clone the repository:
-   ```
-   git clone 
-   cd 
-   ```
+## Tech Stack
 
-2. Install dependencies:
-   ```
-   pip install -r requirements.txt
-   ```
+| Layer | Technology |
+|-------|-----------|
+| Backend | [FastAPI](https://fastapi.tiangolo.com/) (Python) |
+| Templates | [Jinja2](https://jinja.palletsprojects.com/) |
+| Styling | Vanilla CSS with CSS variables |
+| API | YouTube Data API v3 |
+| Cache | Redis (optional, falls back to in-memory) |
+| Database | MongoDB (optional, for analytics) |
+| Hosting | Render / any platform with `Procfile` support |
 
-3. Set up your YouTube API key:
-   - Create a `.env` file in the project root
-   - Add your API key(s):
-     ```
-     APIS=YOUR_API_KEY
-     ```
+## Project Structure
 
-4. Run the application:
-   ```
-   fastapi dev .\app.py
+```
+pelupayt/
+├── app.py                  # FastAPI application & routes
+├── src/
+│   ├── itemlist.py         # Input parsing & orchestration
+│   ├── playlist.py         # Playlist data fetching & caching
+│   ├── video.py            # Video data model
+│   └── utils.py            # YouTube API calls & duration formatting
+├── templates/
+│   ├── home.html           # Main page template (Jinja2)
+│   └── style.css           # All CSS styles
+├── static/
+│   ├── logo.png            # Site logo
+│   ├── favicon.png         # Favicon
+│   └── form_validation.js  # Client-side form validation
+├── .env                    # Environment variables (not in git)
+├── requirements.txt        # Python dependencies
+├── Procfile                # Deployment config
+└── .gitignore
+```
 
-   or
-   uvicorn app:fapp --reload
+## Quick Start
 
-   ```
+### 1. Clone & Install
 
-5. Open your browser and navigate to `http://localhost:8000`
+```bash
+git clone https://github.com/ctrl-ravi/pelupayt.git
+cd pelupayt
+python -m venv .venv
+.venv\Scripts\activate       # Windows
+pip install -r requirements.txt
+```
 
-## 📝 Usage
+### 2. Configure
 
-1. Enter YouTube playlist or video URLs in the input box
-2. (Optional) Specify a range of videos to analyze within playlists
-3. (Optional) Enter a custom playback speed
-4. Click "Analyze" to get detailed information about the playlists and videos
+Create a `.env` file:
 
-## 👏 Technologies Used
+```env
+APIS=YOUR_YOUTUBE_API_KEY
+REDIS_URL=                   # Optional — leave empty for in-memory cache
+MONGO_URL=                   # Optional — leave empty to skip analytics
+```
 
-- [Python](https://www.python.org/)
-- [YouTube Data API](https://developers.google.com/youtube/v3)
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Jinja2](https://jinja.palletsprojects.com/)
-- [Halfmoon](https://www.gethalfmoon.com/)
+> Get a YouTube Data API v3 key from [Google Cloud Console](https://console.cloud.google.com/apis/credentials). Multiple keys can be separated with `;` for automatic rotation.
+
+### 3. Run
+
+```bash
+python app.py
+```
+
+Open **http://localhost:10000** in your browser.
+
+## API Key Rotation
+
+The app supports multiple YouTube API keys for quota management. Add multiple keys in `.env` separated by semicolons:
+
+```env
+APIS=key1;key2;key3
+```
+
+If one key hits its quota, the app automatically rotates to the next.
+
+## Deployment
+
+The included `Procfile` is configured for platforms like Render:
+
+```
+web: uvicorn app:fapp --host 0.0.0.0 --port $PORT
+```
+
+## Author
+
+Built by [Ravi Prakash](https://pelupa.in)
