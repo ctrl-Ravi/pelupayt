@@ -11,10 +11,12 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from pymongo import MongoClient
 
 from src.itemlist import ItemList
 
 YOUTUBE_APIS = os.environ["APIS"].split(";")
+MONGO_URL = os.environ.get("MONGO_URL")
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -25,10 +27,29 @@ fapp.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
 
+# MongoDB for usage stats
+if MONGO_URL:
+    mongo_db = MongoClient(MONGO_URL)["ytplaylistdb"]
+else:
+    mongo_db = None
+
+
+def get_total_analyses():
+    """Get total number of playlist analyses from MongoDB."""
+    try:
+        if mongo_db:
+            pipeline = [{"$group": {"_id": None, "total": {"$sum": "$count"}}}]
+            result = list(mongo_db["ytplaylistcounts"].aggregate(pipeline))
+            return result[0]["total"] if result else 0
+    except Exception as e:
+        logger.error(f"Error fetching analysis count: {e}")
+    return 0
+
 
 @fapp.get("/", response_class=HTMLResponse)
 async def home(request: Request):
-    return templates.TemplateResponse("home.html", {"request": request})
+    total_analyses = get_total_analyses()
+    return templates.TemplateResponse("home.html", {"request": request, "total_analyses": total_analyses})
 
 
 @fapp.post("/", response_class=HTMLResponse)

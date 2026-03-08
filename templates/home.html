@@ -87,6 +87,12 @@
             </div>
             <h1>Find the true length of any <span>YouTube</span> playlist.</h1>
             <p>Paste a playlist URL, playlist ID, or single video link. Automatically calculate watch times adjusted perfectly to your custom playback speeds.</p>
+            {% if total_analyses %}
+            <div class="usage-badge">
+                <i class="fas fa-chart-line"></i>
+                <strong>{{ "{:,}".format(total_analyses) }}</strong> playlists analyzed
+            </div>
+            {% endif %}
         </div>
 
         <!-- Form -->
@@ -366,6 +372,118 @@
                 </div>
             </div>
         </div>
+
+        <!-- Popular Playlists Showcase -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Popular</span>
+            <h2 class="section-title">Try these playlists.</h2>
+            <div class="showcase-grid">
+                <a class="showcase-card" href="javascript:void(0)" onclick="document.getElementById('playlistInput').value='https://www.youtube.com/playlist?list=PLlasXeu85E9cQ32gLCvAvr9vNaUccPVNP';document.getElementById('playlistInput').focus()">
+                    <div class="showcase-card-category">JavaScript</div>
+                    <h4>Namaste JavaScript</h4>
+                    <p>Deep dive into JS core concepts</p>
+                    <div class="showcase-meta">
+                        <span><i class="fas fa-user"></i> Akshay Saini</span>
+                        <span><i class="fas fa-film"></i> 42 videos</span>
+                    </div>
+                </a>
+                <a class="showcase-card" href="javascript:void(0)" onclick="document.getElementById('playlistInput').value='https://www.youtube.com/playlist?list=PLu0W_9lII9agS67Uits0UnJyrYiXhDS6q';document.getElementById('playlistInput').focus()">
+                    <div class="showcase-card-category">Python</div>
+                    <h4>Python for Beginners</h4>
+                    <p>Complete Python tutorial series</p>
+                    <div class="showcase-meta">
+                        <span><i class="fas fa-user"></i> CodeWithHarry</span>
+                        <span><i class="fas fa-film"></i> 100+ videos</span>
+                    </div>
+                </a>
+                <a class="showcase-card" href="javascript:void(0)" onclick="document.getElementById('playlistInput').value='https://www.youtube.com/playlist?list=PLfqMhTWNBTe3LtFWcvwpqTkUSlB32kJop';document.getElementById('playlistInput').focus()">
+                    <div class="showcase-card-category">Data Structures</div>
+                    <h4>DSA Full Course</h4>
+                    <p>Complete DSA series in Java</p>
+                    <div class="showcase-meta">
+                        <span><i class="fas fa-user"></i> Apna College</span>
+                        <span><i class="fas fa-film"></i> 120+ videos</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Comparison Table -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">Compare</span>
+            <h2 class="section-title">Why use this tool?</h2>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th class="highlight-col">This Tool</th>
+                        <th>Manual Count</th>
+                        <th>Other Tools</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Speed calculations</td>
+                        <td class="highlight-col check"><i class="fas fa-check"></i> All speeds</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> Limited</td>
+                    </tr>
+                    <tr>
+                        <td>Batch playlists</td>
+                        <td class="highlight-col check"><i class="fas fa-check"></i> Up to 5</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                    </tr>
+                    <tr>
+                        <td>Range selection</td>
+                        <td class="highlight-col check"><i class="fas fa-check"></i> Yes</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                    </tr>
+                    <tr>
+                        <td>Chrome extension</td>
+                        <td class="highlight-col check"><i class="fas fa-check"></i> Yes</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                        <td class="check"><i class="fas fa-check"></i> Some</td>
+                    </tr>
+                    <tr>
+                        <td>Custom speed input</td>
+                        <td class="highlight-col check"><i class="fas fa-check"></i> Any value</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                        <td class="cross"><i class="fas fa-xmark"></i> No</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- FAQ -->
+        <div class="animate-fade-up delay-300" style="margin-bottom:3.5rem;">
+            <span class="section-label">FAQ</span>
+            <h2 class="section-title">Common questions.</h2>
+            <div class="faq-list" id="faqList">
+                <div class="faq-item">
+                    <button class="faq-question">Is this tool free to use? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Yes, completely free with no sign-up required. Just paste a URL and get instant results.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Does it work with private playlists? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">No, only public and unlisted playlists are supported. Private playlists are not accessible through the YouTube API.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">How accurate are the results? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Results are fetched directly from the YouTube Data API v3, so durations are exact. Unavailable or deleted videos are automatically excluded from the total.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Is there a limit on playlist size? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Playlists are capped at 500 videos per analysis. For larger playlists, use the range feature to analyze specific segments.</div></div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-question">Can I use my own YouTube API key? <i class="fas fa-chevron-down"></i></button>
+                    <div class="faq-answer"><div class="faq-answer-inner">Yes! Click "Options" and enter your API key in the Passkey field. This is useful if the default key has hit its daily quota.</div></div>
+                </div>
+            </div>
+        </div>
+
         {% endif %}
 
     </main>
@@ -479,6 +597,16 @@
                 document.getElementById('loadingOverlay').classList.add('active');
                 document.querySelector('form').submit();
             }
+        });
+
+        // ── FAQ Accordion ──
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const wasOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+                if (!wasOpen) item.classList.add('open');
+            });
         });
     </script>
 

@@ -886,7 +886,220 @@
         .try-example:hover i {
             transform: translateX(3px);
         }
-        /* ── Divider ── */
+
+        /* ── Usage Counter Badge ── */
+        .usage-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-pill);
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 1.25rem;
+        }
+
+        .usage-badge i {
+            color: var(--brand-primary);
+            font-size: 0.75rem;
+        }
+
+        .usage-badge strong {
+            color: var(--text);
+            font-weight: 800;
+        }
+
+        /* ── FAQ Accordion ── */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .faq-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .faq-item:hover {
+            border-color: var(--text-muted);
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text);
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            gap: 1rem;
+        }
+
+        .faq-question i {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.open .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+        }
+
+        .faq-answer-inner {
+            padding: 0 1.25rem 1rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* ── Comparison Table ── */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            font-size: 0.9rem;
+        }
+
+        .comparison-table thead {
+            background: var(--bg-tertiary);
+        }
+
+        .comparison-table th {
+            padding: 0.85rem 1rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table td {
+            padding: 0.85rem 1rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table tbody tr {
+            transition: background 0.2s;
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .comparison-table .check {
+            color: var(--brand-primary);
+            font-weight: 700;
+        }
+
+        .comparison-table .cross {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .comparison-table .highlight-col {
+            background: rgba(99, 102, 241, 0.04);
+        }
+
+        [data-theme="dark"] .comparison-table .highlight-col {
+            background: rgba(129, 140, 248, 0.06);
+        }
+
+        /* ── Showcase Grid ── */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .showcase-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.25rem;
+            transition: var(--transition);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .showcase-card:hover {
+            border-color: var(--brand-primary);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .showcase-card-category {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--brand-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .showcase-card h4 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+            line-height: 1.3;
+        }
+
+        .showcase-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .showcase-card .showcase-meta {
+            margin-top: 0.75rem;
+            display: flex;
+            gap: 0.75rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .showcase-card .showcase-meta i {
+            margin-right: 0.25rem;
+            font-size: 0.65rem;
+        }
+
         .section-divider {
             border: none;
             height: 1px;
