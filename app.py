@@ -4,8 +4,12 @@ load_dotenv()
 
 import logging
 import os
+import threading
+import time
 from typing import Annotated, Optional
 from urllib.parse import urlencode
+
+import requests as http_requests
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, PlainTextResponse, FileResponse
@@ -100,6 +104,28 @@ def static_from_root_google():
 @fapp.get("/style.css", response_class=FileResponse)
 def get_style():
     return FileResponse("templates/style.css", media_type="text/css")
+
+
+# ── Keep-alive for Render free tier ──
+def keep_alive():
+    url = os.environ.get("RENDER_EXTERNAL_URL")
+    if not url:
+        logger.info("KeepAlive: RENDER_EXTERNAL_URL not set, skipping")
+        return
+    logger.info(f"KeepAlive: pinging {url} every 10 minutes")
+    while True:
+        try:
+            http_requests.get(url, timeout=10)
+            logger.info("KeepAlive ping sent")
+        except Exception as e:
+            logger.error(f"KeepAlive error: {e}")
+        time.sleep(600)
+
+
+@fapp.on_event("startup")
+def startup_event():
+    thread = threading.Thread(target=keep_alive, daemon=True)
+    thread.start()
 
 
 if __name__ == "__main__":
