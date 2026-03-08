@@ -41,7 +41,7 @@ else:
 def get_total_analyses():
     """Get total number of playlist analyses from MongoDB."""
     try:
-        if mongo_db:
+        if mongo_db is not None:
             pipeline = [{"$group": {"_id": None, "total": {"$sum": "$count"}}}]
             result = list(mongo_db["ytplaylistcounts"].aggregate(pipeline))
             return result[0]["total"] if result else 0
