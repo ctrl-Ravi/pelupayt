@@ -26,8 +26,9 @@
     <meta name="twitter:description" content="Find how long it takes to watch any YouTube playlist at different speeds." />
     <meta name="twitter:image" content="https://playlistduration.pelupa.in/logo.png" />
 
-    <!-- Favicon and title -->
+    <!-- Favicon -->
     <link rel="icon" href="{{url_for('static', path='favicon.png')}}" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▶</text></svg>" />
     <title>YouTube Playlist Length Calculator - Find Total Duration of Any Playlist</title>
 
     <!-- Google tag (gtag.js) -->
@@ -90,7 +91,7 @@
 
         <!-- Form -->
         <div class="form-card animate-fade-up delay-200">
-            <form method="POST" onsubmit="return validateForm()">
+            <form method="POST" onsubmit="return handleSubmit()">
                 <label class="form-label" for="playlistInput">
                     <i class="fas fa-link"></i> URL Input
                 </label>
@@ -103,6 +104,9 @@
                     placeholder="https://youtube.com/playlist?list=PLxxxx&#10;https://youtube.com/playlist?list=PLyyyy"
                     aria-label="Enter YouTube playlist or video URLs"
                 >{{ request.query_params.get('search_string') or '' }}</textarea>
+                <button type="button" class="try-example" id="tryExample">
+                    Try with a sample playlist <i class="fas fa-arrow-right"></i>
+                </button>
 
                 <!-- Advanced settings -->
                 <div class="advanced-grid" id="advancedGrid">
@@ -142,6 +146,20 @@
             {% for block in playlist_detail %}
             {% set delay = loop.index0 * 100 + 300 %}
             {% set dynamic_attr = 'style="animation-delay: ' ~ delay ~ 'ms;"' %}
+
+            {# ── Check if this is an error block ── #}
+            {% if block | length == 1 and block[0].startswith('Error:') %}
+            <div class="error-card" {{ dynamic_attr | safe }}>
+                <div class="error-icon">
+                    <i class="fas fa-circle-exclamation"></i>
+                </div>
+                <h3>Something went wrong</h3>
+                <p>{{ block[0][7:] | safe }}</p>
+                <a href="/" class="btn-retry">
+                    <i class="fas fa-rotate-right"></i> Try Again
+                </a>
+            </div>
+            {% else %}
             <div class="result-card" {{ dynamic_attr | safe }}>
 
                 {# ── Parse all items into categories ── #}
@@ -149,7 +167,6 @@
                 {% for x in block %}
                     {% set parts = x.split(' : ', 1) %}
                     {% if loop.first %}
-                        {# First item is always the title (e.g. "Playlist : Name" or "Video : Name") #}
                         {% if parts | length == 2 %}
                             {% set ns.title = parts[1] %}
                         {% else %}
@@ -205,7 +222,7 @@
                     {% for s in ns.stats %}
                     <div class="stat-card">
                         <div class="stat-label">{{ s.label }}</div>
-                        <div class="stat-value{% if s.label == 'Total length' or s.label == 'Duration' %} highlight{% endif %}">{{ s.value | safe }}</div>
+                        <div class="stat-value copyable{% if s.label == 'Total length' or s.label == 'Duration' %} highlight{% endif %}" data-copy="{{ s.value }}">{{ s.value | safe }}</div>
                     </div>
                     {% endfor %}
                 </div>
@@ -221,14 +238,32 @@
                         {% for sp in ns.speeds %}
                         <div class="speed-chip">
                             <span class="speed-chip-label">{{ sp.label }}</span>
-                            <span class="speed-chip-value">{{ sp.value | safe }}</span>
+                            <span class="speed-chip-value copyable" data-copy="{{ sp.value }}">{{ sp.value | safe }}</span>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
                 {% endif %}
 
+                {# ── Share ── #}
+                <div class="share-section">
+                    <span class="share-label">Share</span>
+                    {% set share_text = ns.title ~ ' — Total: ' ~ (ns.stats | selectattr('label', 'equalto', 'Total length') | map(attribute='value') | first | default('')) %}
+                    <a class="share-btn" target="_blank" rel="noopener" title="Share on Twitter"
+                       href="https://twitter.com/intent/tweet?text={{ share_text | urlencode }}&url=https://playlistduration.pelupa.in">
+                        <i class="fab fa-x-twitter"></i>
+                    </a>
+                    <a class="share-btn" target="_blank" rel="noopener" title="Share on WhatsApp"
+                       href="https://wa.me/?text={{ (share_text ~ ' https://playlistduration.pelupa.in') | urlencode }}">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <button class="share-btn" title="Copy link" onclick="copyToClipboard('https://playlistduration.pelupa.in')">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+
             </div>
+            {% endif %}
             {% endfor %}
         </div>
 
@@ -335,6 +370,17 @@
 
     </main>
 
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <p>Analyzing playlist...</p>
+        </div>
+    </div>
+
+    <!-- Copy Toast -->
+    <div class="copy-toast" id="copyToast">Copied!</div>
+
     <!-- Footer -->
     <footer class="footer">
         Engineered with <i class="fas fa-heart" style="color: var(--brand-tertiary);"></i> by <a href="https://pelupa.in" target="_blank" rel="noopener">Ravi Prakash</a>
@@ -358,7 +404,6 @@
             }
         }
 
-        // Load saved preference
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme === 'dark') applyTheme(true);
 
@@ -373,21 +418,65 @@
         advancedToggle.addEventListener('click', () => {
             const isOpen = advancedGrid.classList.toggle('visible');
             advancedToggle.classList.toggle('open', isOpen);
-            
-            // Adjust max-height for smooth transition
-            if (isOpen) {
-                // Trigger reflow
-                advancedGrid.style.gridTemplateRows = "1fr";
-            } else {
-                advancedGrid.style.gridTemplateRows = "0fr";
-            }
+            advancedGrid.style.gridTemplateRows = isOpen ? '1fr' : '0fr';
         });
+
+        // ── Loading spinner on submit ──
+        function handleSubmit() {
+            if (!validateForm()) return false;
+            document.getElementById('loadingOverlay').classList.add('active');
+            return true;
+        }
+
+        // ── Try Example ──
+        document.getElementById('tryExample').addEventListener('click', () => {
+            const textarea = document.getElementById('playlistInput');
+            textarea.value = 'https://www.youtube.com/playlist?list=PLlasXeu85E9cQ32gLCvAvr9vNaUccPVNP';
+            textarea.focus();
+            textarea.style.borderColor = 'var(--brand-primary)';
+            setTimeout(() => textarea.style.borderColor = '', 1500);
+        });
+
+        // ── Copy to clipboard ──
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.textContent = 'Copied!';
+                toast.classList.add('show');
+                setTimeout(() => toast.classList.remove('show'), 1500);
+            });
+        }
+
+        document.querySelectorAll('.copyable').forEach(el => {
+            el.addEventListener('click', () => {
+                copyToClipboard(el.getAttribute('data-copy') || el.textContent.trim());
+            });
+        });
+
+        // ── Animated number counters ──
+        function animateValues() {
+            document.querySelectorAll('.stat-value').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(8px)';
+                el.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100 + Math.random() * 200);
+            });
+        }
+        if (document.querySelector('.stat-value')) animateValues();
+
+        // ── Scroll to results if present ──
+        if (document.querySelector('.result-card') || document.querySelector('.error-card')) {
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
 
         // ── Auto-submit if URL has search_string param (Chrome Extension) ──
         window.addEventListener('load', function () {
             const params = new URLSearchParams(window.location.search);
-            // Only auto-submit if search_string is present AND no results are displayed yet
-            if (params.get('search_string') && !document.querySelector('.result-card')) {
+            if (params.get('search_string') && !document.querySelector('.result-card') && !document.querySelector('.error-card')) {
+                document.getElementById('loadingOverlay').classList.add('active');
                 document.querySelector('form').submit();
             }
         });
