@@ -112,14 +112,14 @@ def keep_alive():
     if not url:
         logger.info("KeepAlive: RENDER_EXTERNAL_URL not set, skipping")
         return
-    logger.info(f"KeepAlive: pinging {url} every 10 minutes")
+    logger.info(f"KeepAlive: pinging {url} every 5 minutes")
     while True:
         try:
             http_requests.get(url, timeout=10)
             logger.info("KeepAlive ping sent")
         except Exception as e:
             logger.error(f"KeepAlive error: {e}")
-        time.sleep(600)
+        time.sleep(300)
 
 
 @fapp.on_event("startup")
