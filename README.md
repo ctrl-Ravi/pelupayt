@@ -2,7 +2,7 @@
 
 A fast, minimal web app to calculate the total duration of any YouTube playlist — with playback speed breakdowns.
 
-**Live:** [playlistduration.pelupa.in](https://playlistduration.pelupa.in)
+**Live:** [pelupayt.onrender.com](https://pelupayt.onrender.com)
 
 ---
 
